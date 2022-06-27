@@ -103,7 +103,11 @@ class Matrix2x2 {
 }
 
 //plane class, takes in 3 vectors and calculates the plane
-//v1 is i hat, v2 is j hat, v3 is used to determine z hat
+//v1 is origin, v2 is i hat, v3 is j hat
+//distance data comes in, corner sensor goes to v1 <0,0,data1>
+//other bottom sensor goes to v2 <1,0,data2>
+//top sensor goes to v3 <0,1,data3>
+//v1-v3 are points on the projection plane treated as vectors from the origin ('center' of bulb), for the sake of calculations
 class Plane {
   constructor(v1,v2,v3) {
     this.v1 = v1
@@ -123,26 +127,62 @@ class Plane {
     this.equation = [xProd.x,xProd.y,xProd.z,RHS]
   }
 
+  //unit vectors determined from sensors (v2 and v3) are hard coded to <1,0,dist> and <0,1,dist>
+  //these methods use the orign (v1) and the sensors do depermine the actual distance between the origin and the unit sensors
+  //iHat and jHat are used to determine transformation
   getIHat(){
-    let iHat = this.v1
-    return iHat 
+    let numx = Math.pow(this.v2.x - this.v1.x,2)
+    let numy = Math.pow(this.v2.y - this.v1.y,2)
+    let numz = Math.pow(this.v2.z - this.v1.z,2)
+    let dist = Math.sqrt(numx+numy+numz)
+    let theta = this.getAngle()
+    let horz = dist*Math.cos(theta)
+    let vert = dist*Math.sin(theta)
+    let iHat = new Vector2(horz,vert)
+    return iHat
   }
 
   getJHat(){
-    let jHat = this.v2
+    let numx = Math.pow(this.v3.x - this.v1.x,2)
+    let numy = Math.pow(this.v3.y - this.v1.y,2)
+    let numz = Math.pow(this.v3.z - this.v1.z,2)
+    let dist = Math.sqrt(numx+numy+numz)
+    let theta = this.getAngle()
+    let horz = dist*Math.cos(theta)
+    let vert = dist*Math.sin(theta)
+    let jHat = new Vector2(vert,horz)
     return jHat
   }
   
+  //calculates the angle between the projection plane and a plane that would be normal to the projector 0x+0y+1z=0
+  getAngle() {
+    //numerator = |A1*A2+B1*B2+C1*C2| = |A1*0+B1*0+C1*1|
+    let numerator = Math.abs(this.equation[2])
+    //denominator = sqrt(A1^2+A2^2+A3^2)*sqrt(0^2+0^2+1^2)
+    let denominator = Math.sqrt(Math.pow(this.equation[0],2)+Math.pow(this.equation[1],2)+Math.pow(this.equation[2],2))
+    let cosTheta = numerator/denominator
+    let theta = Math.acos(cosTheta)
+    return theta
+  }
 }
 
-var vec1 = new Vector3(4,-3,1)
-var vec2 = new Vector3(-3,-1,1)
-var vec3 = new Vector3(4,-2,8)
+var vec1 = new Vector3(0,0,5)
+var vec2 = new Vector3(1,0,6)
+var vec3 = new Vector3(0,1,7)
 var projPlane = new Plane(vec1,vec2,vec3)
 projPlane.calcEq()
-var lT = new Matrix2x2(projPlane.v1.x,projPlane.v2.x,projPlane.v1.y,projPlane.v2.y)
+console.log(projPlane.equation)
+var iHat = projPlane.getIHat()
+var jHat = projPlane.getJHat()
+console.log('i^: ')
+console.log(iHat)
+console.log('j^: ')
+console.log(jHat)
+var lT = new Matrix2x2(iHat.x,jHat.x,iHat.y,jHat.y)
+console.log('Matrix: ')
 console.log(lT)
 lT.invert()
+console.log('Matrix\': ')
 console.log(lT)
 var newVec1 = new Vector2(vec1.x,vec1.y)
 var newVec2 = new Vector2(vec2.x,vec2.y)
@@ -150,16 +190,22 @@ var newVec3 = new Vector2(vec3.x,vec3.y)
 newVec1.matMult(lT.a,lT.b,lT.c,lT.d)
 newVec2.matMult(lT.a,lT.b,lT.c,lT.d)
 newVec3.matMult(lT.a,lT.b,lT.c,lT.d)
+console.log('Vector1*LT: ')
 console.log(newVec1)
+console.log('Vector2*LT: ')
 console.log(newVec2)
+console.log('Vector3*LT: ')
 console.log(newVec3)
 
 lT.invert()
 newVec1.matMult(lT.a,lT.b,lT.c,lT.d)
 newVec2.matMult(lT.a,lT.b,lT.c,lT.d)
 newVec3.matMult(lT.a,lT.b,lT.c,lT.d)
+console.log('Vector1: ')
 console.log(newVec1)
+console.log('Vector2: ')
 console.log(newVec2)
+console.log('Vector3: ')
 console.log(newVec3)
 
 
