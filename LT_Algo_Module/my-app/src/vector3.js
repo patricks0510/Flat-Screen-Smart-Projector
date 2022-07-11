@@ -4,5 +4,11 @@ class Vector3 {
       this.y = y
       this.z = z
     }
+    setZ(num){
+        this.z = num
+    }
+    getZ(){
+        return this.z
+    }
   }
   module.exports = Vector3

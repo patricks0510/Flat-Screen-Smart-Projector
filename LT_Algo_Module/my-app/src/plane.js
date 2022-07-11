@@ -14,6 +14,20 @@ class Plane {
       this.v3 = v3
       var equation = [0,0,0,0]//ax+by+cz=d
     }
+
+    //functions to set new distances, automatically recalculates equation
+    setV1(newV1){
+        this.v1 = newV1
+        this.calcEq()
+    }
+    setV2(newV2){
+        this.v2 = newV2
+        this.calcEq()
+    }
+    setV3(newV3){
+        this.v3 = newV3
+        this.calcEq()
+    }
     calcEq(){
       //vectors in the plane
       let vp1 = new Vector3(this.v1.x-this.v2.x,this.v1.y-this.v2.y,this.v1.z-this.v2.z)
@@ -24,6 +38,7 @@ class Plane {
       let RHS = this.v1.x*xProd.x + this.v1.y*xProd.y + this.v1.z*xProd.z
       //equation is the cross product <x,y,z> = RHS
       this.equation = [xProd.x,xProd.y,xProd.z,RHS]
+      console.log(this.equation)
     }
   
     //unit vectors determined from sensors (v2 and v3) are hard coded to:
