@@ -12,7 +12,12 @@ class Plane {
       this.v1 = v1
       this.v2 = v2
       this.v3 = v3
-      var equation = [0,0,0,0]//ax+by+cz=d
+      const equation = [0,0,0,10]//ax+by+cz=d
+      var eqA = equation[0]
+      var eqB = equation[1]
+      var eqC = equation[3]
+      var eqD = equation[4]
+      //this.setEq()
     }
 
     //functions to set new distances, automatically recalculates equation
@@ -38,7 +43,19 @@ class Plane {
       let RHS = this.v1.x*xProd.x + this.v1.y*xProd.y + this.v1.z*xProd.z
       //equation is the cross product <x,y,z> = RHS
       this.equation = [xProd.x,xProd.y,xProd.z,RHS]
+      //this.setEq()
       console.log(this.equation)
+    }
+    setEq(){
+      if(this.equation){
+        this.eqA = this.equation[0]
+        this.eqB = this.equaiton[1]
+        this.eqC = this.equation[2]
+        this.eqD = this.equation[3]
+      }
+      else {
+        this.calcEq()
+      }
     }
   
     //unit vectors determined from sensors (v2 and v3) are hard coded to:

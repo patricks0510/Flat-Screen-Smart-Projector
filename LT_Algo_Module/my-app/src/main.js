@@ -7,6 +7,7 @@ const Vector2 = require('./vector2.js')
 const Vector3 = require('./vector3.js')
 const Matrix2x2 = require('./matrix2x2.js')
 const Plane = require('./plane.js')
+const BmpImage = require('./BmpImage.js')
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -62,58 +63,18 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-function mathProof(){
-  var vec1 = new Vector3(0,0,5)
-  var vec2 = new Vector3(1,0,6)
-  var vec3 = new Vector3(0,1,7)
-  var projPlane = new Plane(vec1,vec2,vec3)
-  projPlane.calcEq()
-  console.log(projPlane.equation)
-  var iHat = projPlane.getIHat()
-  var jHat = projPlane.getJHat()
-  console.log('i^: ')
-  console.log(iHat)
-  console.log('j^: ')
-  console.log(jHat)
-  var lT = new Matrix2x2(iHat.x,jHat.x,iHat.y,jHat.y)
-  console.log('Matrix: ')
-  console.log(lT)
-  lT.invert()
-  console.log('Matrix\': ')
-  console.log(lT)
-  var newVec1 = new Vector2(vec1.x,vec1.y)
-  var newVec2 = new Vector2(vec2.x,vec2.y)
-  var newVec3 = new Vector2(vec3.x,vec3.y)
-  newVec1.matMult(lT.a,lT.b,lT.c,lT.d)
-  newVec2.matMult(lT.a,lT.b,lT.c,lT.d)
-  newVec3.matMult(lT.a,lT.b,lT.c,lT.d)
-  console.log('Vector1*LT: ')
-  console.log(newVec1)
-  console.log('Vector2*LT: ')
-  console.log(newVec2)
-  console.log('Vector3*LT: ')
-  console.log(newVec3)
 
-  lT.invert()
-  newVec1.matMult(lT.a,lT.b,lT.c,lT.d)
-  newVec2.matMult(lT.a,lT.b,lT.c,lT.d)
-  newVec3.matMult(lT.a,lT.b,lT.c,lT.d)
-  console.log('Vector1: ')
-  console.log(newVec1)
-  console.log('Vector2: ')
-  console.log(newVec2)
-  console.log('Vector3: ')
-  console.log(newVec3)
-}
 
-originDistance = new Vector3(0,0,10)
-iHatDistance = new Vector3(1,0,10)
-jHatDistance = new Vector3(0,1,10)
+var originDistance = new Vector3(0,0,10)
+var iHatDistance = new Vector3(1,0,10)
+var jHatDistance = new Vector3(0,1,10)
 
-projPlane = new Plane(originDistance,iHatDistance,jHatDistance)
+var projPlane = new Plane(originDistance,iHatDistance,jHatDistance)
+
+//image = 
 
 //front end communication logics
-ipcMain.on('requestData', (event, arg) => { event.reply('fetchData', { ready: true, originDistance: originDistance, iHatDistance: iHatDistance, jHatDistance: jHatDistance }) })
+ipcMain.on('requestData', (event, arg) => { event.reply('fetchData', { ready: true, originDistance: originDistance, iHatDistance: iHatDistance, jHatDistance: jHatDistance, projPlane: projPlane }) })
 ipcMain.on('oDist',(event,arg) => {originDistance.setZ(arg);projPlane.setV1(originDistance)})
 ipcMain.on('iDist',(event,arg) => {iHatDistance.setZ(arg);projPlane.setV2(iHatDistance)})
 ipcMain.on('jDist',(event,arg) => {jHatDistance.setZ(arg);projPlane.setV3(jHatDistance)})
