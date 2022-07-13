@@ -10,6 +10,7 @@ interface ImageTabState {
     imageUploaded: boolean;
     originalImage: Blob | null;
     transformedImage: Blob | null;
+    imageProjecting: boolean;
 }
 
 export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabState> {
@@ -18,7 +19,8 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
         this.state = {
             imageUploaded : false,
             originalImage: null,
-            transformedImage: null
+            transformedImage: null,
+            imageProjecting: false
         };
         
     }
@@ -49,8 +51,23 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
         return this.state.originalImage;
     }
 
-    startProjection = () => {
+    toggleProjection = () => {
+        if (this.state.imageProjecting)
+            this.stopProjection();
+        else
+            this.startProjection();
+    }
 
+    startProjection = () => {
+        this.setState({imageProjecting: true});
+        document.getElementById("proj_button")!.innerText = "Stop Projection";
+        document.getElementById("proj_button")!.style.backgroundColor = 'red';
+    }
+
+    stopProjection = () => {
+        this.setState({imageProjecting: false});
+        document.getElementById("proj_button")!.innerText = "Start Projection";
+        document.getElementById("proj_button")!.style.backgroundColor = 'green';
     }
 
     render() {
@@ -69,7 +86,7 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
                 <Frame className='image-frame-tran'>
                     <img id="trans_img" className="image"/>
                 </Frame>
-                <button id="" className='image-project-button' onClick={() => this.startProjection()}>Start Projection</button>
+                <button id="proj_button" className='image-project-button' onClick={() => this.toggleProjection()}>Start Projection</button>
                 <h2  className='image-frame-tran caption'>Transformed Image</h2>
             </div>
         );
