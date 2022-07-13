@@ -1,5 +1,7 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
+import fs from 'fs';
+import bmp from '@wokwi/bmp-ts';
 
 
 import {ImageTabComponent} from "./ImageTabComponent";
@@ -39,15 +41,15 @@ export class App extends React.Component<AppProps, AppState> {
         main = <ImageTabComponent></ImageTabComponent>
       }
       else if (this.state.tabState === TabState.projection){
-        main = <ProjectionTabComponent></ProjectionTabComponent>
+        main = <ProjectionTabComponent ultra1={0} ultra2={0} ultra3={0}></ProjectionTabComponent>
       }
       else if (this.state.tabState === TabState.info){
-        main = <InfoTabComponent></InfoTabComponent>
+        main = <InfoTabComponent ultra1={0} ultra2={0} ultra3={0}></InfoTabComponent>
       }
 
       return (
-        <div>
-          <div>
+        <div className='main'>
+          <div className='App-header'>
             <h1>Flat Screen Smart Projector</h1>
           </div>
 
@@ -57,7 +59,7 @@ export class App extends React.Component<AppProps, AppState> {
             <button className="tablinks" onClick={() => this.switchTab('info')}>Info</button>
           </div>
 
-          <div>
+          <div className='main'>
           {main}
           </div>
         </div>        
