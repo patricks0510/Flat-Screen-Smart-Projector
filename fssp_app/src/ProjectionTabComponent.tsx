@@ -1,4 +1,6 @@
 import React from "react";
+import Sketch from "react-p5";
+import p5Types from "p5";
 import { Frame } from "./Frame";
 import './ProjectionTabComponent.scss';
 
@@ -8,17 +10,37 @@ interface ProjectionTabProps {
     ultra3: number;
 }
 
+
 export class ProjectionTabComponent extends React.Component<ProjectionTabProps> {
     constructor(props: Readonly<ProjectionTabProps>) {
         super(props);
     }
 
+
     render() {
+
+        //See annotations in JS for more information
+	    const setup = (p5: p5Types, canvasParentRef: Element) => {
+            p5.createCanvas(p5.windowWidth * 0.3, p5.windowHeight * 0.5, "webgl").parent(canvasParentRef);
+            p5.normalMaterial();
+	    };
+
+	    const draw = (p5: p5Types) => {
+		    p5.background(200);
+            p5.orbitControl();
+            p5.rotateY(0.5);
+		    p5.box(30, 50);
+	    };
+
+        const windowResized = (p5: p5Types) => {
+            p5.resizeCanvas(p5.windowWidth * 0.3, p5.windowHeight * 0.5);
+        }
+
         return (
             <div>
                 <h1>Plane Projection Tab</h1>
                 <Frame className="projection-frame">
-                    <p className="projection-center">Coming Soon</p>
+                    <Sketch setup={setup} draw={draw} windowResized={windowResized}/>
                 </Frame>
                 <Frame className="sensor-frame">
                     <h2>Sensors</h2>
