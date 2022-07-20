@@ -22,7 +22,7 @@ var lT = new Matrix2x2(iHat.x,jHat.x,iHat.y,jHat.y)
 
 lT.invert()
 
-var pic = new BmpImage('dots')
+var pic = new BmpImage('bmp_24')
 console.log(pic.bmpData.width)
 console.log(pic.bmpData.height)
 pic.pixelStream = transformer.applyTransform(pic.pixelStream,pic.bmpData.height,pic.bmpData.width,lT)

@@ -4,7 +4,7 @@ const Matrix2x2 = require('./matrix2x2.js')
 const Plane = require('./plane.js')
 const CartesianPixel = require('./cartesianPixel.js')
 const BmpImage = require('./bmpImage.js')
-
+const { sort } = require('mathjs')
 
 //pseudocode
 /*
@@ -77,8 +77,6 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
       for(let j = 0; j< width; j++){
         //temp current pixel
         let currentPX = pxInCartesian[j][i]
-        //console.log('current px:')
-        //console.log(currentPX)
         //hold the coordinates of that pixel in cartesian system
         let originalCoords = currentPX.getCoords()
 
@@ -107,8 +105,7 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
         }
         //create new pixel with those cartesian coordinates
         let movedPX = new CartesianPixel(currentPX.a,currentPX.r,currentPX.g,currentPX.b,newCoords.x,newCoords.y)
-        //console.log('moved px:')
-        //console.log(movedPX)
+
         //moved pixels stored in new aray, j i indexed from top left, x y indexed from center
         modPxInCartesian[j][i] = movedPX
       }
@@ -116,15 +113,23 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
 
     
     buffPos = 0
-
+    console.log('x val of a pixel:')
+    console.log(modPxInCartesian[0][0].getCoords())
     //sort pixels by highest to lowest y values, then lowest to highest x values
     //this achieves a sort from top right to bottom left
     const sortedTopRightPX = modPxInCartesian.sort(
-        (pxA,pxB) => 
-            pxA.y - pxB.y ||
-            -1*(pxA.x - pxB.x),
+        function (pxA,pxB) {
+            let pixelA = pxA
+            console.log(pixelA.x)
+            return pxA.y - pxB.y || -1*(pxA.x - pxB.x)
+        }
     )
+    console.log('sortedtopRightPx')
     console.log(sortedTopRightPX[0][0])
+    console.log(sortedTopRightPX[0][1])
+    console.log(sortedTopRightPX[0][2])
+    console.log(sortedTopRightPX[0][3])
+    console.log(sortedTopRightPX[1][0])
     //start with the lowest x values and the highest y values to get a pixel stream indexed from top right
     for(let i = height; i > 0; i--){
       for(let j = 0; j > width; j++){
