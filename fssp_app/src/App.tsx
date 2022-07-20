@@ -38,7 +38,7 @@ export class App extends React.Component<AppProps, AppState> {
       let main;
 
       if (this.state.tabState === TabState.image){
-        main = <ImageTabComponent></ImageTabComponent>
+        main = <ImageTabComponent ultra1={0} ultra2={0} ultra3={0}></ImageTabComponent>
       }
       else if (this.state.tabState === TabState.projection){
         main = <ProjectionTabComponent ultra1={0} ultra2={0} ultra3={0}></ProjectionTabComponent>

@@ -3,7 +3,9 @@ import { Frame } from "./Frame";
 import './ImageTabComponent.scss';
 
 interface ImageTabProps {
-
+    ultra1: number;
+    ultra2: number;
+    ultra3: number;
 }
 
 interface ImageTabState {
