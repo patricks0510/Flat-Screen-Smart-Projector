@@ -7,7 +7,9 @@ const Vector2 = require('./vector2.js')
 const Vector3 = require('./vector3.js')
 const Matrix2x2 = require('./matrix2x2.js')
 const Plane = require('./plane.js')
-const BmpImage = require('./BmpImage.js')
+const CartesianPixel = require('./cartesianPixel.js')
+const BmpImage = require('./bmpImage.js')
+const transformer = require('./applyTransform.js')
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -65,13 +67,14 @@ app.on('activate', () => {
 
 
 
+
 var originDistance = new Vector3(0,0,10)
 var iHatDistance = new Vector3(1,0,10)
 var jHatDistance = new Vector3(0,1,10)
 
 var projPlane = new Plane(originDistance,iHatDistance,jHatDistance)
 
-//image = 
+ 
 
 //front end communication logics
 ipcMain.on('requestData', (event, arg) => { event.reply('fetchData', { ready: true, originDistance: originDistance, iHatDistance: iHatDistance, jHatDistance: jHatDistance, projPlane: projPlane }) })
