@@ -8,7 +8,8 @@ const Vector3 = require('./vector3.js')
 const Matrix2x2 = require('./matrix2x2.js')
 const Plane = require('./plane.js')
 const CartesianPixel = require('./cartesianPixel.js')
-//const BmpImage = require('./BmpImage.js')
+const BmpImage = require('./bmpImage.js')
+const transformer = require('./applyTransform.js')
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -64,49 +65,7 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-//passes in a pixel buffer from bmpImage.js
-function applyTransform(decodedBMP,transformMatrix){
-  //empty 2d array for pixels with corresponding cartesian coordinates
-  var pxInCartesian = [[],[]]
-  //get the pixel data from the decoded BMP
-  var pxBuffer = decodedBMP.getPixelArray()
-  //pixel buffer position, increments by 4 as there are 4 bytes per pixel
-  let bufPos = 0
 
-  //loop through the image, pixel by pixel
-  for(let i = 0; i<decodedBMP.getHeight(); i++) {
-    for(let j = 0; j<decodedBMP.getWidth();j++) {
-      //get the a,r,g,b values from each pixel
-      let a = pxBuffer[buffPos]
-      let r = pxBuffer[buffPos+1]
-      let g = pxBuffer[buffPos+2]
-      let b = pxBuffer[buffPos+3]
-      
-      //get the centered x,y coordinates from cornedered coordinates
-      let x = -1*(j - decodedBMP.getWidth()/2)
-      let y = -1*(i - decodedBMP.getHeight()/2)
-
-      //create new pixel object and add to array
-      pxInCartesian[i][j] = new CartesianPixel(a,r,g,b,x,y)
-    }
-    //move to next section of the pixel buffer to get the next pixel
-    bufPos += 4
-  }
-
-  var modPxInCartesian = [[],[]]
-
-  for(let i = 0; i<decodedBMP.getHeight(); i++){
-    for(let j = 0; j< decodedBMP.getWidth(); j++){
-      let currentPX = pxInCartesian[i][j]
-      let originalCoords = currentPX.getCoords()
-
-      let newCoords = originalCoords.matMult(transformMatrix.a,transformMatrix.b,transformMatrix.c,transformMatrix.d)
-      let movedPX = new CartesianPixel(currrentPX.a,currentPX.r,currentPX.g,currentPX.b,newCoords.x,newCoords.y)
-
-      modPxInCartesian[i][j] = movedPX
-    }
-  }
-}
 
 
 var originDistance = new Vector3(0,0,10)
@@ -115,7 +74,7 @@ var jHatDistance = new Vector3(0,1,10)
 
 var projPlane = new Plane(originDistance,iHatDistance,jHatDistance)
 
-//image = 
+ 
 
 //front end communication logics
 ipcMain.on('requestData', (event, arg) => { event.reply('fetchData', { ready: true, originDistance: originDistance, iHatDistance: iHatDistance, jHatDistance: jHatDistance, projPlane: projPlane }) })

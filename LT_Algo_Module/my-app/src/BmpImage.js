@@ -1,26 +1,27 @@
 var bmp = require("bmp-js");
 const fs = require('fs');
+const transformer = require('./applyTransform.js')
 
 
-class bmpImage {
+class BmpImage {
     constructor(filename){
         this.fname = filename
         var bmpBuffer = fs.readFileSync(this.fname+'.bmp');
         this.bmpData = bmp.decode(bmpBuffer);
-        console.log(this.bmpData)
-        this.pixelArray = [...this.bmpData.data] 
+        //console.log(this.bmpData)
+        this.pixelStream = [...this.bmpData.data] 
     }
     colorShift(){
-        for(let i = 0; i < this.pixelArray.length; i+=3){
+        for(let i = 0; i < this.pixelStream.length; i+=3){
             //skip A bit of ARGB
             i += 1
             for(let j = 0; j < 3; j++){
-                if(this.pixelArray[i+j] == '00'){
-                    this.pixelArray[i+j] = 170
+                if(this.pixelStream[i+j] == '00'){
+                    this.pixelStream[i+j] = 170
                 }
             }
         }
-        this.bmpData.data = this.pixelArray
+        this.bmpData.data = this.pixelStream
         //console.log(this.bmpData.data)
     }
     createNewBMP(){
@@ -38,8 +39,8 @@ class bmpImage {
         // close the stream
         writeEdit.end();
     }
-    getPixelArray(){
-        return this.pixelArray
+    getPixelStream(){
+        return this.pixelStream
     }
     getHeight(){
         return this.bmpData.height
@@ -49,10 +50,10 @@ class bmpImage {
     }
 }
 
-
-var pic = new bmpImage('bmp_24')
-pic.colorShift()
-pic.createNewBMP()
+module.exports = BmpImage
+// var pic = new BmpImage('bmp_24')
+// transformer.applyTransform(pix.bmpData,)
+// pic.createNewBMP()
 
 
 
@@ -60,19 +61,19 @@ pic.createNewBMP()
 
 
 //could have the UI module send a pixel array object, I work with that, and then send a pixel array back
-//let pixelArray = [...pic.bmpData.data]
+//let pixelStream = [...pic.bmpData.data]
 
-// for(let i = 0; i < pixelArray.length; i+=3){
+// for(let i = 0; i < pixelStream.length; i+=3){
 //     //skip A bit of ARGB
 //     i += 1
 //     for(let j = 0; j < 3; j++){
-//         if(pixelArray[i+j] == 00){
-//             pixelArray[i+j] = 170
+//         if(pixelStream[i+j] == 00){
+//             pixelStream[i+j] = 170
 //         }
 //     }
 // }
 
-//pic.bmpData.data = pixelArray
+//pic.bmpData.data = pixelStream
 
 // //console.log(pic.bmpData)
 // var editImg = bmp.encode(pic.bmpData)

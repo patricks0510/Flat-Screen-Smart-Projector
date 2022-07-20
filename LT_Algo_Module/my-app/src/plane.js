@@ -44,6 +44,7 @@ class Plane {
       //equation is the cross product <x,y,z> = RHS
       this.equation = [xProd.x,xProd.y,xProd.z,RHS]
       //this.setEq()
+      console.log('a,b,c,d for plane equation:')
       console.log(this.equation)
     }
     setEq(){
