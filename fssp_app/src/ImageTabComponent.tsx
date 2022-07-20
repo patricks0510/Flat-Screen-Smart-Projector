@@ -1,3 +1,4 @@
+import { blob } from "node:stream/consumers";
 import React from "react";
 import { Frame } from "./Frame";
 import './ImageTabComponent.scss';
@@ -50,6 +51,38 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
     }
 
     transformImage = () => {
+        /*var bmp = require("bmp-js");
+
+        class bmpImage {
+
+            bmpData;
+
+            constructor(file: Blob | null){
+                this.bmpData = bmp.decode(file!.arrayBuffer());   
+            }
+        };
+
+        var filename = URL.createObjectURL(this.state.originalImage!);
+        var pic = new bmpImage(this.state.originalImage);
+        //could have the UI module send a pixel array object, I work with that, and then send a pixel array back
+        let pixelArray = [...pic.bmpData.data];
+
+        for(let i = 0; i < pixelArray.length; i+=3){
+            //skip A bit of ARGB
+            i += 1
+            for(let j = 0; j < 3; j++){
+                if(pixelArray[i+j] == 0){
+                    pixelArray[i+j] = 170
+                }
+            }
+        }
+
+        pic.bmpData.data = pixelArray;
+        console.log(pic.bmpData);
+        var editImg = bmp.encode(pic.bmpData);
+        console.log(editImg);
+        
+        return editImg;*/
         return this.state.originalImage;
     }
 
