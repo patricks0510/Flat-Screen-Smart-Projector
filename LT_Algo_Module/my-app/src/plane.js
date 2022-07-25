@@ -12,7 +12,7 @@ class Plane {
       this.v1 = v1
       this.v2 = v2
       this.v3 = v3
-      const equation = [0,0,0,10]//ax+by+cz=d
+      var equation = [0,0,0,10]//ax+by+cz=d
       var eqA = equation[0]
       var eqB = equation[1]
       var eqC = equation[3]
@@ -44,6 +44,7 @@ class Plane {
       //equation is the cross product <x,y,z> = RHS
       this.equation = [xProd.x,xProd.y,xProd.z,RHS]
       //this.setEq()
+      console.log('a,b,c,d for plane equation:')
       console.log(this.equation)
     }
     setEq(){

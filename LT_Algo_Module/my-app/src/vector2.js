@@ -9,6 +9,8 @@ class Vector2 {
   
       this.x = newx
       this.y = newy
+
+      return new Vector2(this.x,this.y)
     }
   }
   module.exports = Vector2
