@@ -111,7 +111,7 @@ export class ProjectionTabComponent extends React.Component<ProjectionTabProps> 
 
         return (
             <div>
-                <h1>Plane Projection Tab</h1>
+                <h1>Plane Projection</h1>
                 <Frame className="projection-frame">
                     <Sketch setup={setup} draw={draw} windowResized={windowResized}/>
                 </Frame>

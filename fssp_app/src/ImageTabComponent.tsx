@@ -95,8 +95,13 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
 
     startProjection = () => {
         this.setState({imageProjecting: true});
-        document.getElementById("proj_button")!.innerText = "Stop Projection";
-        document.getElementById("proj_button")!.style.backgroundColor = 'red';
+
+        fetch("http://192.168.4.1/sensors", {method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/octet-stream', 'Access-Control-Allow-Origin': '*'}}).then((response) => {
+        if (response.ok) return response.json();
+        }).then((json) => {document.getElementById("proj_button")!.innerText = "Stop Projection";
+                            document.getElementById("proj_button")!.style.backgroundColor = 'red';})
+
+        
     }
 
     stopProjection = () => {
@@ -110,9 +115,9 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
             <div className="image-tab">
                 <h1>Image</h1>
                 <Frame className='image-frame-orig'>
-                    <img id="orig_img" className="image"/>
+                    <img id="orig_img" className="image"/>   
                 </Frame>
-                <input
+                <input className="image-upload-btn"
                         accept="image/bmp"
                         type="file"
                         onChange={this.uploadImage}

@@ -22,6 +22,18 @@
     transform: translate(-50%, -50%);
 }
 
+.image-upload-btn {
+    position: absolute;
+    z-index: 3;
+    left: 45%;
+    top: 51%;
+    height: 50%;
+    width: 30%;
+    margin: 0 auto;
+    padding: 16px;
+    transform: translate(-50%, -50%);
+}
+
 .image-frame-tran {
     position: absolute;
     z-index: 0;

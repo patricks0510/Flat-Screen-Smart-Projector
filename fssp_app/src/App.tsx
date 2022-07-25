@@ -7,6 +7,7 @@ import bmp from '@wokwi/bmp-ts';
 import {ImageTabComponent} from "./ImageTabComponent";
 import { ProjectionTabComponent } from './ProjectionTabComponent';
 import { InfoTabComponent } from './InfoTabComponent';
+import { ServerResponse } from 'http';
 
 
 enum TabState {
@@ -20,7 +21,12 @@ interface AppProps{
 }
 
 interface AppState {
+  ultra1: number;
+  ultra2: number;
+  ultra3: number;
   tabState: TabState;
+  timer: number;
+  logs: string;
 }
 
 
@@ -29,22 +35,46 @@ export class App extends React.Component<AppProps, AppState> {
     constructor(props: AppProps){
       super(props);
       this.state = {
-        tabState: TabState.image
+        ultra1: 0,
+        ultra2: 0,
+        ultra3: 0,
+        tabState: TabState.image,
+        timer: 1000,
+        logs: ""
       };
     }
 
+    componentDidMount() {
+      this.fetchDistances();
+      this.setState({timer: window.setInterval(() => this.fetchDistances(), 5000)});
+    }
+
+    componentWillUnmount() {
+      clearInterval(this.state.timer);
+      this.setState({timer: 0});
+    }
+
+
+    fetchDistances = () => {
+    
+      console.log("Fetching Distances");
+      fetch("http://192.168.4.1/sensors", {mode: 'no-cors', headers: {'Access-Control-Allow-Origin': '*'}}).then((response) => {
+        if (response.ok) return response.json();
+      }).then((json) => this.setState({ultra1: json.J2, ultra2: json.J3, ultra3: json.J4, logs: this.state.logs + `(info)${new Date().toISOString()}: ${json.J2} ${json.J3} ${json.J4}\n\n`}));
+    
+    }
 
     render() {
       let main;
 
       if (this.state.tabState === TabState.image){
-        main = <ImageTabComponent ultra1={0} ultra2={0} ultra3={0}></ImageTabComponent>
+        main = <ImageTabComponent ultra1={this.state.ultra1} ultra2={this.state.ultra2} ultra3={this.state.ultra3}></ImageTabComponent>
       }
       else if (this.state.tabState === TabState.projection){
-        main = <ProjectionTabComponent ultra1={0} ultra2={0} ultra3={0}></ProjectionTabComponent>
+        main = <ProjectionTabComponent ultra1={this.state.ultra1} ultra2={this.state.ultra2} ultra3={this.state.ultra3}></ProjectionTabComponent>
       }
       else if (this.state.tabState === TabState.info){
-        main = <InfoTabComponent ultra1={0} ultra2={0} ultra3={0}></InfoTabComponent>
+        main = <InfoTabComponent ultra1={this.state.ultra1} ultra2={this.state.ultra2} ultra3={this.state.ultra3} logs={this.state.logs}></InfoTabComponent>
       }
 
       return (
