@@ -26,6 +26,6 @@ var pic = new BmpImage('bmp_24')
 console.log(pic.bmpData.width)
 console.log(pic.bmpData.height)
 pic.pixelStream = transformer.applyTransform(pic.pixelStream,pic.bmpData.height,pic.bmpData.width,lT)
-pic.colorShift()
+//pic.colorShift()
 
 pic.createNewBMP()
