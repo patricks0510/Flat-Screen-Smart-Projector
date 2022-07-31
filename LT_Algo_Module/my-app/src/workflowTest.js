@@ -8,7 +8,7 @@ const transformer = require('./applyTransform.js')
 
 
 var originDistance = new Vector3(0,0,10)
-var iHatDistance = new Vector3(1,0,11)
+var iHatDistance = new Vector3(1,0,10.5)
 var jHatDistance = new Vector3(0,1,10)
 
 var projPlane = new Plane(originDistance,iHatDistance,jHatDistance)
@@ -26,5 +26,6 @@ var pic = new BmpImage('bmp_24')
 console.log(pic.bmpData.width)
 console.log(pic.bmpData.height)
 pic.pixelStream = transformer.applyTransform(pic.pixelStream,pic.bmpData.height,pic.bmpData.width,lT)
+pic.colorShift()
 
 pic.createNewBMP()

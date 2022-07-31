@@ -40,7 +40,7 @@ send output buffer to encode function
 function applyTransform(decodedBMP,height,width,transformMatrix){
     //empty 2d array for pixels with corresponding cartesian coordinates
     var filler1 = new CartesianPixel(0,0,0,0,0,0)
-    var pxInCartesian = [...Array(width)].map(e => Array(height));
+    var pxInCartesian = [...Array(width)].map(e => Array(height).fill(filler1));
     //get the pixel data from the decoded BMP
     var pxBuffer = decodedBMP
     //pixel buffer position, increments by 4 as there are 4 bytes per pixel
@@ -69,8 +69,7 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
     console.log(pxInCartesian[0][0])
     console.log(pxInCartesian[width-1][height-1])
     //modified pixels in cartesian coordinates, transform applied
-    var filler2 = new CartesianPixel(0,0,0,0,0,0)
-    var modPxInCartesian = [...Array(width)].map(e => Array(height));
+    var modPxInCartesian = [...Array(width)].map(e => Array(height).fill(filler1));
     
     //loop through the pixel array, modify the coodinates according to the transform matrix calculated
     for(let i = 0; i<height; i++){
@@ -114,22 +113,45 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
     
     buffPos = 0
     console.log('x val of a pixel:')
-    console.log(modPxInCartesian[0][0].getCoords())
+    console.log(modPxInCartesian[0][0].x)
     //sort pixels by highest to lowest y values, then lowest to highest x values
     //this achieves a sort from top right to bottom left
-    const sortedTopRightPX = modPxInCartesian.sort(
-        function (pxA,pxB) {
-            let pixelA = pxA
-            console.log(pixelA.x)
-            return pxA.y - pxB.y || -1*(pxA.x - pxB.x)
+    // var  sortedTopRightPX = modPxInCartesian.sort(
+    //     function (pxA,pxB) {
+    //         let pixelA = pxA
+    //         //console.log(pixelA)
+    //         return pxA.y - pxB.y || -1*(pxA.x - pxB.x)
+    //     }
+    // )
+    var pxXCounter = 1
+    var pxYCounter = 1
+    var sortedTopRightPX = [...Array(width)].map(e => Array(height).fill(filler1))
+    
+    //loop through dimensions of picture
+    for(i = -1*height/2; i < height/2; i++){
+      for(j = -1*width/2; i < width/2; j++){
+        //loop through entire pixel array
+        for(k = 0; k < height*width; k++){
+          //if black pixel at x,y, output array has black pixel
+          if(modPxInCartesian[pxXCounter][pxYCounter].x == j && modPxInCartesian[pxXCounter][pxYCounter].y == i && modPxInCartesian[pxXCounter][pxYCounter].r == 'ff'){
+            sortedTopRightPX[pxXCounter][pxYCounter] = modPxInCartesian[pxXCounter][pxYCounter]
+          }
+          //otherwise white pixel
+          else{
+            sortedTopRightPX[pxXCounter][pxYCounter] = new CartesianPixel('00','00','00','00',pxXCounter,pxYCounter)
+          }
         }
-    )
-    console.log('sortedtopRightPx')
-    console.log(sortedTopRightPX[0][0])
-    console.log(sortedTopRightPX[0][1])
-    console.log(sortedTopRightPX[0][2])
-    console.log(sortedTopRightPX[0][3])
-    console.log(sortedTopRightPX[1][0])
+
+        pxXCounter += 1
+        pxYCounter += 1
+      }
+    }
+    // console.log('sortedtopRightPx')
+    // console.log(sortedTopRightPX[0][0])
+    // console.log(sortedTopRightPX[0][1])
+    // console.log(sortedTopRightPX[0][2])
+    // console.log(sortedTopRightPX[0][3])
+    // console.log(sortedTopRightPX[1][0])
     //start with the lowest x values and the highest y values to get a pixel stream indexed from top right
     for(let i = height; i > 0; i--){
       for(let j = 0; j > width; j++){
