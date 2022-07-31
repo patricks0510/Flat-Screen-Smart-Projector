@@ -8,6 +8,7 @@ import {ImageTabComponent} from "./ImageTabComponent";
 import { ProjectionTabComponent } from './ProjectionTabComponent';
 import { InfoTabComponent } from './InfoTabComponent';
 import { ServerResponse } from 'http';
+import Matrix2x2 from './matrix2x2';
 
 
 enum TabState {
@@ -27,6 +28,8 @@ interface AppState {
   tabState: TabState;
   timer: number;
   logs: string;
+  eq: Array<number>;
+  lt: Matrix2x2;
 }
 
 
@@ -40,7 +43,9 @@ export class App extends React.Component<AppProps, AppState> {
         ultra3: 0,
         tabState: TabState.image,
         timer: 1000,
-        logs: ""
+        logs: "",
+        eq: [0,0,0,0],
+        lt: new Matrix2x2(0,0,0,0)
       };
     }
 
@@ -59,8 +64,38 @@ export class App extends React.Component<AppProps, AppState> {
     
       console.log("Fetching Distances");
       fetch("http://192.168.4.1/sensors", {mode: 'no-cors', headers: {'Access-Control-Allow-Origin': '*'}}).then((response) => {
+        console.log(response);
         if (response.ok) return response.json();
-      }).then((json) => this.setState({ultra1: json.J2, ultra2: json.J3, ultra3: json.J4, logs: this.state.logs + `(info)${new Date().toISOString()}: ${json.J2} ${json.J3} ${json.J4}\n\n`}));
+        else
+          console.error("Did Not Read Distance");
+          
+      }).then((json) => {
+        console.log(json);
+        const Vector2 = require('./vector2.js')
+        const Vector3 = require('./vector3.js')
+        const Matrix2x2 = require('./matrix2x2.js')
+        const Plane = require('./plane.js')
+        const CartesianPixel = require('./cartesianPixel.js')
+        const BmpImage = require('./BmpImage.js')
+        const transformer = require('./applyTransform.js');
+        
+        var originDistance = new Vector3(0,0,json.J2)
+        var iHatDistance = new Vector3(1,0,json.J3)
+        var jHatDistance = new Vector3(0,1,json.J4)
+
+        var projPlane = new Plane(originDistance,iHatDistance,jHatDistance)
+
+        projPlane.calcEq()
+
+        var iHat = projPlane.getIHat()
+        var jHat = projPlane.getJHat()
+
+        var lT = new Matrix2x2(iHat.x,jHat.x,iHat.y,jHat.y)
+
+        lT.invert()
+
+        this.setState({lt: lT, eq: projPlane.getEq(), ultra1: json.J2, ultra2: json.J3, ultra3: json.J4, logs: this.state.logs + `(info)${new Date().toISOString()}: ${json.J2} ${json.J3} ${json.J4}\n\n`});
+      });
     
     }
 

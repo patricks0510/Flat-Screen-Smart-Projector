@@ -1,4 +1,5 @@
 import React from "react";
+import BmpImage from "./BmpImage";
 import { Frame } from "./Frame";
 import './ImageTabComponent.scss';
 
@@ -42,21 +43,15 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
                 if (orig_div){
                     orig_div.src = URL.createObjectURL(this.state.originalImage!);
                 }
-                this.transformImage();
+                this.setOriginalBuffer();
+                //this.transformImage(URL.createObjectURL(this.state.originalImage!));
                 
             });
         }
     }
 
-    convertBufferToUint8 = (arrayBuffer: ArrayBuffer): Uint8Array => {
-        let temp = new Uint8Array();
-        for(let i = 0; i < 1; i++){
 
-        }
-        return temp;
-    }
-
-    transformImage = () => {
+    setOriginalBuffer = () => {
         var bmp = require("bmp-js");
         var bufferReader = new FileReader();
         bufferReader.addEventListener('loadend', () => {
@@ -65,27 +60,10 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
                 var trans_blob;
                 console.log(this.state.bmpbuffer);
                 console.log(this.state.bmpbuffer.toString());
-                var bmpData = bmp.decode(this.state.bmpbuffer); 
-
-            //could have the UI module send a pixel array object, I work with that, and then send a pixel array back
-            let pixelArray = [...bmpData.data]
-
-            for(let i = 0; i < pixelArray.length; i+=3){
-                //skip A bit of ARGB
-                i += 1
-                for(let j = 0; j < 3; j++){
-                    if(pixelArray[i+j] === 0){
-                        pixelArray[i+j] = 170
-                    }
-                }
-            }
-
-            bmpData.data = pixelArray
-            console.log(bmpData)
-            var editImg = bmp.encode(bmpData)
-            trans_blob = new Blob([editImg], { type: 'application/octet-stream' });
+                
+            trans_blob = new Blob([temp], { type: 'application/octet-stream' });
         
-            this.setState({transformedStream: editImg, transformedImage: trans_blob}, () => {
+            this.setState({transformedStream: temp, transformedImage: trans_blob}, () => {
                 const trans_div = document.getElementById("trans_img") as HTMLImageElement;
                     if (trans_div){
                         trans_div.src = URL.createObjectURL(this.state.transformedImage!);
@@ -96,7 +74,17 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
         
 
         bufferReader.readAsArrayBuffer(this.state.originalImage!);
+    }
+
+    transformImage = (url: string) => {
         
+
+        var pic = new BmpImage(url)
+        console.log(pic.bmpData.width)
+        console.log(pic.bmpData.height)
+        //pic.pixelStream = transformer.applyTransform(pic.pixelStream,pic.bmpData.height,pic.bmpData.width,lT)
+
+        pic.createNewBMP()
     }
 
     toggleProjection = () => {
@@ -109,7 +97,7 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
     startProjection = () => {
         this.setState({imageProjecting: true});
 
-        fetch("http://192.168.4.1/sensors", {method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/octet-stream', 'Access-Control-Allow-Origin': '*'}}).then((response) => {
+        fetch("http://192.168.4.1/text", {method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/octet-stream', 'Access-Control-Allow-Origin': '*'}, body: this.state.originalImage}).then((response) => {
         if (response.ok) return response.json();
         }).then((json) => {document.getElementById("proj_button")!.innerText = "Stop Projection";
                             document.getElementById("proj_button")!.style.backgroundColor = 'red';})
