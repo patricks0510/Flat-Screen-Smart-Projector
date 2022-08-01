@@ -2,11 +2,13 @@ import React from "react";
 import BmpImage from "./BmpImage";
 import { Frame } from "./Frame";
 import './ImageTabComponent.scss';
+import Matrix2x2 from "./matrix2x2";
 
 interface ImageTabProps {
     ultra1: number;
     ultra2: number;
     ultra3: number;
+    lT: Matrix2x2;
 }
 
 interface ImageTabState {
@@ -87,29 +89,14 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
         pic.createNewBMP()
     }
 
-    toggleProjection = () => {
-        if (this.state.imageProjecting)
-            this.stopProjection();
-        else
-            this.startProjection();
-    }
-
-    startProjection = () => {
-        this.setState({imageProjecting: true});
-
-        fetch("http://192.168.4.1/text", {method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/octet-stream', 'Access-Control-Allow-Origin': '*'}, body: this.state.originalImage}).then((response) => {
-        if (response.ok) return response.json();
-        }).then((json) => {document.getElementById("proj_button")!.innerText = "Stop Projection";
-                            document.getElementById("proj_button")!.style.backgroundColor = 'red';})
-
-        
-    }
-
-    stopProjection = () => {
-        this.setState({imageProjecting: false});
-        document.getElementById("proj_button")!.innerText = "Start Projection";
-        document.getElementById("proj_button")!.style.backgroundColor = 'green';
-    }
+    sendProjection = () => {
+        if(this.state.imageUploaded){
+            fetch("http://192.168.4.1/text", {method: 'POST', mode:'no-cors', headers: {'Content-Type': 'application/octet-stream'}, body: this.state.bmpbuffer})
+            .then((response) => {
+                if (response.ok) return response.json();
+            });
+        }
+    } 
 
     render() {
         return (
@@ -127,7 +114,7 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
                 <Frame className='image-frame-tran'>
                     <img id="trans_img" className="image" alt=""/>
                 </Frame>
-                <button id="proj_button" className='image-project-button' onClick={() => this.toggleProjection()}>Start Projection</button>
+                <button id="proj_button" className='image-project-button' onClick={() => this.sendProjection()}>Send Projection</button>
                 <h2  className='image-frame-tran caption'>Transformed Image</h2>
             </div>
         );
