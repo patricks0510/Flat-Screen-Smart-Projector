@@ -6,6 +6,9 @@ const CartesianPixel = require('./cartesianPixel.js')
 const BmpImage = require('./bmpImage.js')
 const transformer = require('./applyTransform.js')
 
+const { performance } = require('perf_hooks');
+
+var startTime = performance.now()
 
 var originDistance = new Vector3(0,0,10)
 var iHatDistance = new Vector3(1,0,10.5)
@@ -22,10 +25,13 @@ var lT = new Matrix2x2(iHat.x,jHat.x,iHat.y,jHat.y)
 
 lT.invert()
 
-var pic = new BmpImage('bmp_24')
-console.log(pic.bmpData.width)
-console.log(pic.bmpData.height)
-pic.pixelStream = transformer.applyTransform(pic.pixelStream,pic.bmpData.height,pic.bmpData.width,lT)
+var pic = new BmpImage('circle')
+let newpixelStream = transformer.applyTransform(pic.pixelStream,pic.bmpData.height,pic.bmpData.width,lT)
+pic.overwritePxStream(newpixelStream)
 //pic.colorShift()
 
 pic.createNewBMP()
+
+var endTime = performance.now()
+
+console.log(`Sensor input to image output took ${endTime - startTime} milliseconds`)
