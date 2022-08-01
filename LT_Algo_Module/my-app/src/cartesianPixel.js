@@ -14,6 +14,12 @@ class CartesianPixel {
         let coords = new Vector2(this.x,this.y)
         return coords
     }
+    getX(){
+        return this.x
+    }
+    getY(){
+        return this.y
+    }
 }
 
 module.exports = CartesianPixel

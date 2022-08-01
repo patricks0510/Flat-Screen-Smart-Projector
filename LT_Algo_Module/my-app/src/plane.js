@@ -44,8 +44,6 @@ class Plane {
       //equation is the cross product <x,y,z> = RHS
       this.equation = [xProd.x,xProd.y,xProd.z,RHS]
       //this.setEq()
-      console.log('a,b,c,d for plane equation:')
-      console.log(this.equation)
     }
     setEq(){
       if(this.equation){
@@ -75,7 +73,7 @@ class Plane {
       let horz = dist*Math.cos(theta)
       let vert = dist*Math.sin(theta)
       //iHat calculated with trigonometry and angle between planes
-      let iHat = new Vector2(horz,vert)
+      let iHat = new Vector2(vert,horz)
       return iHat
     }
   
@@ -87,7 +85,7 @@ class Plane {
       let theta = this.getAngle()
       let horz = dist*Math.cos(theta)
       let vert = dist*Math.sin(theta)
-      let jHat = new Vector2(vert,horz)
+      let jHat = new Vector2(horz,vert)
       return jHat
     }
     
