@@ -58,6 +58,9 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
         var bufferReader = new FileReader();
         bufferReader.addEventListener('loadend', () => {
             let temp = bufferReader.result as string;
+            let temp_buffer = bufferReader.result as ArrayBuffer;
+            let temp_arr_buff = new Uint8Array(temp_buffer);
+            //console.log(temp_arr_buff.toString())
             this.setState({bmpbuffer: temp}, () => {
                 var trans_blob;
                 console.log(this.state.bmpbuffer);
