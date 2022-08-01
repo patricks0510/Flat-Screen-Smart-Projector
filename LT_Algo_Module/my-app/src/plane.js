@@ -73,7 +73,7 @@ class Plane {
       let horz = dist*Math.cos(theta)
       let vert = dist*Math.sin(theta)
       //iHat calculated with trigonometry and angle between planes
-      let iHat = new Vector2(vert,horz)
+      let iHat = new Vector2(horz,vert)
       return iHat
     }
   
@@ -85,7 +85,7 @@ class Plane {
       let theta = this.getAngle()
       let horz = dist*Math.cos(theta)
       let vert = dist*Math.sin(theta)
-      let jHat = new Vector2(horz,vert)
+      let jHat = new Vector2(vert,horz)
       return jHat
     }
     

@@ -11,6 +11,9 @@ class BmpImage {
         //console.log(this.bmpData)
         this.pixelStream = [...this.bmpData.data] 
     }
+    getBmpDataEncoded(){
+        return bmp.encode(this.bmpData)
+    }
     overwritePxStream(pxStream){
         this.bmpData.data = pxStream
     }

@@ -25,7 +25,7 @@ var lT = new Matrix2x2(iHat.x,jHat.x,iHat.y,jHat.y)
 
 lT.invert()
 
-var pic = new BmpImage('circle')
+var pic = new BmpImage('arrows')
 let newpixelStream = transformer.applyTransform(pic.pixelStream,pic.bmpData.height,pic.bmpData.width,lT)
 pic.overwritePxStream(newpixelStream)
 //pic.colorShift()
