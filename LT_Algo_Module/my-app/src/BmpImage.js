@@ -11,6 +11,12 @@ class BmpImage {
         //console.log(this.bmpData)
         this.pixelStream = [...this.bmpData.data] 
     }
+    getBmpDataEncoded(){
+        return bmp.encode(this.bmpData)
+    }
+    overwritePxStream(pxStream){
+        this.bmpData.data = pxStream
+    }
     colorShift(){
         for(let i = 0; i < this.pixelStream.length; i+=3){
             //skip A bit of ARGB
