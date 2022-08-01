@@ -1,12 +1,15 @@
 import React from "react";
 import BmpImage from "./BmpImage";
+import { ipcRenderer } from 'electron';
 import { Frame } from "./Frame";
 import './ImageTabComponent.scss';
+import Matrix2x2 from "./matrix2x2";
 
 interface ImageTabProps {
     ultra1: number;
     ultra2: number;
     ultra3: number;
+    lT: Matrix2x2;
 }
 
 interface ImageTabState {
@@ -43,8 +46,8 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
                 if (orig_div){
                     orig_div.src = URL.createObjectURL(this.state.originalImage!);
                 }
-                this.setOriginalBuffer();
-                //this.transformImage(URL.createObjectURL(this.state.originalImage!));
+                //this.setOriginalBuffer();
+                ipcRenderer.send('transform', [URL.createObjectURL(this.state.originalImage!), this.props.lT]);
                 
             });
         }
@@ -52,7 +55,7 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
 
 
     setOriginalBuffer = () => {
-        var bmp = require("bmp-js");
+        const bmp = require("bmp-js");
         var bufferReader = new FileReader();
         bufferReader.addEventListener('loadend', () => {
             let temp = bufferReader.result as string;
@@ -77,39 +80,17 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
     }
 
     transformImage = (url: string) => {
-        
-
-        var pic = new BmpImage(url)
-        console.log(pic.bmpData.width)
-        console.log(pic.bmpData.height)
-        //pic.pixelStream = transformer.applyTransform(pic.pixelStream,pic.bmpData.height,pic.bmpData.width,lT)
-
-        pic.createNewBMP()
+         
     }
 
-    toggleProjection = () => {
-        if (this.state.imageProjecting)
-            this.stopProjection();
-        else
-            this.startProjection();
-    }
-
-    startProjection = () => {
-        this.setState({imageProjecting: true});
-
-        fetch("http://192.168.4.1/text", {method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/octet-stream', 'Access-Control-Allow-Origin': '*'}, body: this.state.originalImage}).then((response) => {
-        if (response.ok) return response.json();
-        }).then((json) => {document.getElementById("proj_button")!.innerText = "Stop Projection";
-                            document.getElementById("proj_button")!.style.backgroundColor = 'red';})
-
-        
-    }
-
-    stopProjection = () => {
-        this.setState({imageProjecting: false});
-        document.getElementById("proj_button")!.innerText = "Start Projection";
-        document.getElementById("proj_button")!.style.backgroundColor = 'green';
-    }
+    sendProjection = () => {
+        if(this.state.imageUploaded){
+            fetch("http://192.168.4.1/text", {method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/octet-stream', 'Access-Control-Allow-Origin': '*'}, body: this.state.originalImage})
+            .then((response) => {
+                if (response.ok) return response.json();
+            });
+        }
+    }   
 
     render() {
         return (
@@ -127,7 +108,7 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
                 <Frame className='image-frame-tran'>
                     <img id="trans_img" className="image" alt=""/>
                 </Frame>
-                <button id="proj_button" className='image-project-button' onClick={() => this.toggleProjection()}>Start Projection</button>
+                <button id="proj_button" className='image-project-button' onClick={() => this.sendProjection()}>Start Projection</button>
                 <h2  className='image-frame-tran caption'>Transformed Image</h2>
             </div>
         );

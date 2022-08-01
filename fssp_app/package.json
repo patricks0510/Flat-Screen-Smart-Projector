@@ -2,6 +2,7 @@
   "name": "fssp_app",
   "version": "0.1.0",
   "private": true,
+  "main": "electron/main.ts",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
@@ -30,7 +31,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron:start": "concurrently \"yarn start\" \"wait-on http://localhost:3001 && electron .\""
   },
   "eslintConfig": {
     "extends": [
@@ -51,9 +53,9 @@
     ]
   },
   "devDependencies": {
-    "concurrently": "^7.2.2",
+    "concurrently": "^7.3.0",
     "cross-env": "^7.0.3",
-    "electron": "^19.0.5",
+    "electron": "^19.0.10",
     "electron-builder": "^23.1.0",
     "wait-on": "^6.0.1"
   },

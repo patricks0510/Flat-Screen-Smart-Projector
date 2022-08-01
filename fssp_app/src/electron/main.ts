@@ -1,4 +1,7 @@
-const { app, BrowserWindow, screen: electronScreen } = require('electron');
+import { IpcMainEvent } from "electron";
+import Matrix2x2 from "../matrix2x2";
+
+const { app, BrowserWindow, screen: electronScreen, ipcMain } = require('electron');
 
 const createMainWindow = () => {
   let mainWindow = new BrowserWindow({
@@ -17,7 +20,7 @@ const createMainWindow = () => {
   mainWindow.once('ready-to-show', () => mainWindow.show());
 
   mainWindow.on('closed', () => {
-    mainWindow = null;
+    mainWindow.destroy();
   });
 };
 
@@ -36,5 +39,18 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
+ipcMain.on('transform', (event: IpcMainEvent, path: URL, lT: Matrix2x2) => {
+    const BmpImage = require('./BmpImage.js')
+    const transformer = require('./applyTransform.js')
+
+    var pic = new BmpImage(path)
+    console.log(pic.bmpData.width)
+    console.log(pic.bmpData.height)
+    pic.pixelStream = transformer.applyTransform(pic.pixelStream,pic.bmpData.height,pic.bmpData.width,lT)
+    pic.createNewBMP()
+
+});
+
 
 export {}

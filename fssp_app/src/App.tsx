@@ -1,13 +1,10 @@
 import React from 'react';
 import './App.scss';
-import fs from 'fs';
-import bmp from '@wokwi/bmp-ts';
 
 
 import {ImageTabComponent} from "./ImageTabComponent";
 import { ProjectionTabComponent } from './ProjectionTabComponent';
 import { InfoTabComponent } from './InfoTabComponent';
-import { ServerResponse } from 'http';
 import Matrix2x2 from './matrix2x2';
 
 
@@ -63,7 +60,7 @@ export class App extends React.Component<AppProps, AppState> {
     fetchDistances = () => {
     
       console.log("Fetching Distances");
-      fetch("http://192.168.4.1/sensors", {mode: 'no-cors', headers: {'Access-Control-Allow-Origin': '*'}}).then((response) => {
+      fetch("http://192.168.4.1/sensors").then((response) => {
         console.log(response);
         if (response.ok) return response.json();
         else
@@ -103,10 +100,10 @@ export class App extends React.Component<AppProps, AppState> {
       let main;
 
       if (this.state.tabState === TabState.image){
-        main = <ImageTabComponent ultra1={this.state.ultra1} ultra2={this.state.ultra2} ultra3={this.state.ultra3}></ImageTabComponent>
+        main = <ImageTabComponent ultra1={this.state.ultra1} ultra2={this.state.ultra2} ultra3={this.state.ultra3} lT={this.state.lt}></ImageTabComponent>
       }
       else if (this.state.tabState === TabState.projection){
-        main = <ProjectionTabComponent ultra1={this.state.ultra1} ultra2={this.state.ultra2} ultra3={this.state.ultra3}></ProjectionTabComponent>
+        main = <ProjectionTabComponent ultra1={this.state.ultra1} ultra2={this.state.ultra2} ultra3={this.state.ultra3} eq={this.state.eq}></ProjectionTabComponent>
       }
       else if (this.state.tabState === TabState.info){
         main = <InfoTabComponent ultra1={this.state.ultra1} ultra2={this.state.ultra2} ultra3={this.state.ultra3} logs={this.state.logs}></InfoTabComponent>
