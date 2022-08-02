@@ -117,9 +117,6 @@ export class ProjectionTabComponent extends React.Component<ProjectionTabProps, 
             p5.resizeCanvas(p5.windowWidth * 0.3, p5.windowHeight * 0.5);
         }
 
-        const resetCamera = () => {
-            
-        }
 
         return (
             <div>
@@ -127,6 +124,7 @@ export class ProjectionTabComponent extends React.Component<ProjectionTabProps, 
                 <Frame className="projection-frame">
                     <Sketch setup={setup} draw={draw} windowResized={windowResized}/>
                 </Frame>
+                <button className='image-project-button' onClick={() => this.updateEquation()}>Update Projection</button>
                 <Frame className="sensor-frame">
                     <h2>Sensors</h2>
                     <h4 className="green">Status: Active</h4>

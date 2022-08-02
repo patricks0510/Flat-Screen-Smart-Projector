@@ -1,3 +1,4 @@
+import { round } from "mathjs";
 import React from "react";
 import BmpImage from "./BmpImage";
 import { Frame } from "./Frame";
@@ -60,8 +61,9 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
             let temp = bufferReader.result as string;
             let temp_buffer = bufferReader.result as ArrayBuffer;
             let temp_arr_buff = new Uint8Array(temp_buffer);
+            console.log(temp_arr_buff)
             //console.log(temp_arr_buff.toString())
-            this.setState({bmpbuffer: temp}, () => {
+            this.setState({bmpbuffer: this.compressPixelArray(temp_arr_buff)}, () => {
                 var trans_blob;
                 console.log(this.state.bmpbuffer);
                 console.log(this.state.bmpbuffer.toString());
@@ -81,6 +83,49 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
         bufferReader.readAsArrayBuffer(this.state.originalImage!);
     }
 
+    compressPixelArray = (buffer: Uint8Array): Uint8Array => {
+        let compressed = new Array();
+        let count = 1;
+        let lastValue = 0;
+        for(let i = 54; i < buffer.length; i++){
+            if (round(buffer[i] / 255) * 255  == lastValue){
+                count++;
+                if (count > 255){
+                    compressed.push(255);
+                    compressed.push(1);
+                    count = 1;
+                }
+            } else {
+                lastValue = round(buffer[i] / 255) * 255;
+                compressed.push(count);
+                count = 1;
+            }
+        }
+        let result = Uint8Array.from(compressed);
+        /*
+        for(let i = 54; i < buffer.length; i++){
+            let rounded_val = round(buffer[i] / 255) * 255
+            console.log(rounded_val)
+            var base2 = (rounded_val).toString(2);
+            for (let j = 0; j < 8; j++)
+                if (base2[j]  == lastValue){
+                    count++;
+                    if (count > 255){
+                        compressed.push(255);
+                        compressed.push(1);
+                        count = 1;
+                    }
+            } else {
+                lastValue = base2[j];
+                compressed.push(count);
+                count = 1;
+            }
+        }
+        */
+        return result;
+        //return result.fill(201);
+    }
+
     transformImage = (url: string) => {
         
 
@@ -93,8 +138,9 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
     }
 
     sendProjection = () => {
+
         if(this.state.imageUploaded){
-            fetch("http://192.168.4.1/text", {method: 'POST', mode:'no-cors', headers: {'Content-Type': 'application/octet-stream'}, body: this.state.bmpbuffer})
+            fetch("http://127.0.0.1:5000/post_img", {method: 'POST', headers: {'Content-Type':'application/octet-stream'}, body: URL.createObjectURL(this.state.transformedImage!)})
             .then((response) => {
                 if (response.ok) return response.json();
             });
