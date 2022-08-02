@@ -17,7 +17,6 @@ interface ProjectionTabState {
     curr_eq: Array<number>
 }
 
-
 export class ProjectionTabComponent extends React.Component<ProjectionTabProps, ProjectionTabState> {
     constructor(props: Readonly<ProjectionTabProps>) {
         super(props);
@@ -55,9 +54,13 @@ export class ProjectionTabComponent extends React.Component<ProjectionTabProps, 
             p5.normalMaterial();
             p5.camera(-100,-100,200);
             
-            let plane_coeff = this.props.eq;
+
+            /*let plane_coeff = this.props.eq;
             let a = [plane_coeff[0],plane_coeff[1],plane_coeff[2]];
             let b = [0,0,1];
+            */
+            let a = [1,1,1];
+            let b = [0,1,0];
             let [axis, angle] = this.calculateAxisAndAngle(a,b);
             x_rotation = axis[0] * angle;
             y_rotation = axis[1] * angle;
@@ -121,6 +124,7 @@ export class ProjectionTabComponent extends React.Component<ProjectionTabProps, 
                     <Sketch setup={setup} draw={draw} windowResized={windowResized}/>
                     <button onClick={this.updateEquation}></button>
                 </Frame>
+                <button className='image-project-button' onClick={() => this.updateEquation()}>Update Projection</button>
                 <Frame className="sensor-frame">
                     <h2>Sensors</h2>
                     <h4 className="green">Status: Active</h4>

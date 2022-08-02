@@ -59,15 +59,15 @@ export class App extends React.Component<AppProps, AppState> {
 
     fetchDistances = () => {
     
-      console.log("Fetching Distances");
+      //console.log("Fetching Distances");
       fetch("http://192.168.4.1/sensors").then((response) => {
-        console.log(response);
+        //console.log(response);
         if (response.ok) return response.json();
         else
           console.error("Did Not Read Distance");
           
       }).then((json) => {
-        console.log(json);
+        //console.log(json);
         const Vector2 = require('./vector2.js')
         const Vector3 = require('./vector3.js')
         const Matrix2x2 = require('./matrix2x2.js')
@@ -110,6 +110,9 @@ export class App extends React.Component<AppProps, AppState> {
       }
 
       return (
+
+        
+
         <div className='main'>
           <div className='App-header'>
             <h1>Flat Screen Smart Projector</h1>

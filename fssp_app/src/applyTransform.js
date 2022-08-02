@@ -3,7 +3,7 @@ const Vector3 = require('./vector3.js')
 const Matrix2x2 = require('./matrix2x2.js')
 const Plane = require('./plane.js')
 const CartesianPixel = require('./cartesianPixel.js')
-const BmpImage = require('./bmpImage.js')
+const BmpImage = require('./BmpImage.js')
 const { sort, mod, sec } = require('mathjs')
 
 //pseudocode

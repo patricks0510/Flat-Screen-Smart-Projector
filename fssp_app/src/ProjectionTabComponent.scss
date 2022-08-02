@@ -82,3 +82,15 @@
 .green {
     color: green;
 }
+.image-project-button {
+    position: absolute;
+    z-index: 0;
+    left: 50%;
+    bottom: 5%;
+    height: 7%;
+    width: 30%;
+    margin: 0 auto;
+    padding: 16px;
+    transform: translate(-50%, -50%);
+    background-color: green;
+}
