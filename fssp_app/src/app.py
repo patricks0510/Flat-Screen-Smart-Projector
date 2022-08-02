@@ -20,6 +20,8 @@ def post_img():
     # save image from frontend to filesystem
     save_img(data_url_bytes, 'upload.bmp')
 
+    return "OK"
+
     # request sensor dists
     J2, J3, J4 = get_sensor_dists()
     print(J2, J3, J4)
