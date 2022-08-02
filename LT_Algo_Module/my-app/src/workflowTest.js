@@ -20,7 +20,7 @@ projPlane.calcEq()
 
 var iHat = projPlane.getIHat()
 var jHat = projPlane.getJHat()
-
+console.log(projPlane.getAngle())
 var lT = new Matrix2x2(iHat.x,jHat.x,iHat.y,jHat.y)
 
 lT.invert()
