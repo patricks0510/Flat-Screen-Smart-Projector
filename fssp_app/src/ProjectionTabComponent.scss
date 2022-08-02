@@ -1,0 +1,84 @@
+@import './theme.scss';
+
+.projection-frame {
+    position: absolute;
+    z-index: 0;
+    left: 30%;
+    top: 50%;
+    height: 50%;
+    width: 30%;
+    margin: 0 auto;
+    padding: 16px;
+    transform: translate(-50%, -50%);
+    align-content: center;
+}
+
+.projection-equation {
+    position: absolute;
+    z-index: 0;
+    left: 30%;
+    top: 50%;
+    height: 50%;
+    width: 30%;
+    margin: 0 auto;
+    padding: 16px;
+    transform: translate(-50%, -50%);
+    align-content: center;
+}
+
+.info-frame {
+    color: white;
+    position: absolute;
+    z-index: 0;
+    left: 30%;
+    top: 50%;
+    height: 50%;
+    width: 30%;
+    margin: 0 auto;
+    padding: 16px;
+    transform: translate(-50%, -50%);
+    align-content: center;
+}
+
+.sensor-frame {
+    color: white;
+    position: absolute;
+    z-index: 0;
+    right: 0%;
+    top: 50%;
+    height: 50%;
+    width: 30%;
+    margin: 0 auto;
+    padding: 16px;
+    transform: translate(-50%, -50%);
+}
+
+.info-logs {
+    color: white;
+    position: absolute;
+    z-index: 0;
+    right: 0%;
+    top: 50%;
+    height: 50%;
+    width: 30%;
+    margin: 0 auto;
+    padding: 16px;
+    transform: translate(-50%, -50%);
+}
+
+.projection-center {
+    position: absolute;
+    z-index: 0;
+    left: 50%;
+    bottom: 50%;
+    height: 10%;
+    width: 50%;
+    margin: 0 auto;
+    padding: 16px;
+    color: white;
+    transform: translate(-50%, -50%);
+}
+
+.green {
+    color: green;
+}
