@@ -159,9 +159,7 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
         }
       }
     }
-    //console.log('sanity check')
-    //console.log(modPxInCartesian[150][75])
-    //console.log(sortedTopRightPX[150][75])
+
     buffPos = 0
     //start with the lowest x values and the highest y values to get a pixel stream indexed from top right
     for(let i = 0; i < height; i++){
