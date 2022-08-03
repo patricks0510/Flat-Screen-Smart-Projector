@@ -166,8 +166,8 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
     
     //check the moded pixel cartesian array for black pixels
     var blackPxBoolArray = [...Array(width)].map(e => Array(height).fill(false))
-    for(i = 0; i < height; i++){
-      for(j = 0; j < width; j++){
+    for(let i = 0; i < height; i++){
+      for(let j = 0; j < width; j++){
         if(modPxInCartesian[j][i].r == '00' && modPxInCartesian[j][i].g == '00' && modPxInCartesian[j][i].b == '00'){
           //console.log(modPxInCartesian[j][i].x, modPxInCartesian[j][i].y)
           //console.log()
@@ -191,8 +191,8 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
       }
     }
 
-    for(i = 0; i < height; i++){
-      for(j = 0; j < width; j++){
+    for(let i = 0; i < height; i++){
+      for(let j = 0; j < width; j++){
         if(blackPxBoolArray[j][i] == true){
           //console.log('black px placed')
           sortedTopRightPX[j][i] = new CartesianPixel(0,0,0,0,0,0)

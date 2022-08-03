@@ -1,7 +1,6 @@
 import { round } from "mathjs";
 import React from "react";
 import BmpImage from "./BmpImage";
-import { ipcRenderer } from 'electron';
 import { Frame } from "./Frame";
 import './ImageTabComponent.scss';
 import Matrix2x2 from "./matrix2x2";
@@ -48,8 +47,7 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
                     orig_div.src = URL.createObjectURL(this.state.originalImage!);
                     console.log( orig_div.src );
                 }
-                //this.setOriginalBuffer();
-                ipcRenderer.send('transform', [URL.createObjectURL(this.state.originalImage!), this.props.lT]);
+                
                 
             });
         }
@@ -142,9 +140,10 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
             
             fetch("http://127.0.0.1:5000/post_img", {method: 'POST', body: image_url})
             .then((response) => {
-                console.log("got a resp");
-                console.log(response)
+                console.log("uploaded original image to file system!");
             });
+
+            
     } 
 
     loadImg = () => {

@@ -22,20 +22,11 @@ def post_img():
 
     return "OK"
 
-    # request sensor dists
-    J2, J3, J4 = get_sensor_dists()
-    print(J2, J3, J4)
-    
-    # linear transform
-    # TBD, end up having an image called transform.bmp
-
-    # compress and send
-    img_bytes = img_compressed('transform.bmp')                      
-    requests.post('http://192.168.4.1/text', data=img_bytes, 
-        headers = {'Content-Type': 'application/octet-stream'})
-
-    # send an image from the filesystem back to the frontend
-    return img_data_url('transform.bmp')        
+    # # compress and send
+    # img_bytes = img_compressed('transform.bmp')                      
+    # requests.post('http://192.168.4.1/text', data=img_bytes, 
+    #     headers = {'Content-Type': 'application/octet-stream'})
+       
 
 
 def save_img(data_url_bytes, img_name):
@@ -44,26 +35,6 @@ def save_img(data_url_bytes, img_name):
     f = open(img_name, 'wb')
     f.write(response.file.read())
     f.close()
-
-
-def get_sensor_dists():
-    J2s = []
-    J3s = []
-    J4s = []
-
-    for i in range(3):
-        dists = requests.get('http://192.168.4.1/sensors').json()
-        J2, J3, J4 = float(dists['J2']), float(dists['J3']), float(dists['J4'])
-        J2s.append(J2)
-        J3s.append(J3)
-        J4s.append(J4)
-        time.sleep(0.1) # 0.1 seconds
-
-    J2s.sort()
-    J3s.sort()
-    J4s.sort()
-
-    return J2s[1], J3s[1], J4s[1]
 
 
 def img_compressed(img_name):
