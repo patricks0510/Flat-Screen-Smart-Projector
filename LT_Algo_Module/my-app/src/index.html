@@ -1,10 +1,38 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Linear Transforms</title>
-  </head>
-  <body>
-    <div id="app"></div>
-  </body>
+<head>
+<script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js'></script>
+<script>
+    //
+    function load_img(input) {
+        if (input.files && input.files[0]) { 
+            let reader = new FileReader();
+            reader.readAsDataURL(input.files[0]); 
+            reader.onload = function (e) {
+                $('#uploaded_img').attr('src', e.target.result);
+            };
+        }
+    }
+
+    //
+    function post_img() {
+        let data_url = $('#uploaded_img').attr('src');
+        if ( data_url == '' ) {
+            console.log('upload an image first')
+            return;
+        }
+        $.post('http://127.0.0.1:5000/post_img',
+            data_url,
+            function(resp_data_url){
+                $('#transformed_img').attr('src', resp_data_url);
+            });
+    }
+</script>
+</head>
 </html>
+<body>
+    <input type='file' accept='image/*' onchange='load_img(this);'/>
+    <input type='submit' value='upload image' onclick='post_img();'>
+    <img src='' id='uploaded_img' alt='uploaded image to project'>
+    <img src='' id='transformed_img' alt='transformed image'>
+</body>
