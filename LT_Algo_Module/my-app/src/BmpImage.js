@@ -32,7 +32,7 @@ class BmpImage {
     }
     createNewBMP(){
         let editImg = bmp.encode(this.bmpData)
-        let writeEdit = fs.createWriteStream(this.fname+'_EDIT.bmp')
+        let writeEdit = fs.createWriteStream('transform.bmp')
 
         // write some data with a base64 encoding
         writeEdit.write(editImg.data, 'hex');
