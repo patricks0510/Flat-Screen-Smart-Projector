@@ -117,52 +117,9 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
     // console.log(modPxInCartesian[199][0])
     // console.log(modPxInCartesian[0][149])
     // console.log(modPxInCartesian[199][149])
-    
-    
-    // let testPX = modPxInCartesian[0][0]
-    // console.log(testPX)
-    // console.log('x coord')
-    // console.log(Object.values(testPX)[4])
-    //sort pixels by highest to lowest y values, then lowest to highest x values
-    //this achieves a sort from top right to bottom left
-    // var sortedTopRightPX = modPxInCartesian.sort((a,b) => {
-    //   console.log(a.y)  
-    //   Object.values(a)[5] - Object.values(b)[5] || -1*(Object.values(a)[4] - Object.values(b)[4])
-    //   }
-    // )
 
     //empty array of empty pixels
     let sortedTopRightPX = [...Array(width)].map(e => Array(height).fill(filler1))
-    //loop through dimensions of picture for output buffer
-    /*
-    for(i = -1*height/2; i < height/2; i++){
-      for(j = -1*width/2; j < width/2; j++){
-        let blackPx = false
-        //loop through entire pixel array to check for black pixels at (j,i)
-        for(k = 0; k < height; k++){
-          for(l = 0; l < width; l++){
-            console.log(l)
-            console.log(k)
-            let currentPx = modPxInCartesian[l][k]
-            if(currentPx.x == j && currentPx.y == i && currentPx.r == '00'){
-              blackPx = true 
-            }
-            if(blackPx == true){
-              sortedTopRightPX[l][k] = new CartesianPixel('00','00','00','00',j,i)
-            }
-            else{
-              sortedTopRightPX[l][k] = new CartesianPixel('00','ff','ff','ff',j,i)
-            }
-            blackPx = false
-          }
-
-          // console.log(modPxInCartesian[0][0].x)
-          //if black pixel at x,y, output array has black pixel
-          
-        }
-      }
-    }
-    */
     
     //check the moded pixel cartesian array for black pixels
     var blackPxBoolArray = [...Array(width)].map(e => Array(height).fill(false))
@@ -202,9 +159,7 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
         }
       }
     }
-    //console.log('sanity check')
-    //console.log(modPxInCartesian[150][75])
-    //console.log(sortedTopRightPX[150][75])
+
     buffPos = 0
     //start with the lowest x values and the highest y values to get a pixel stream indexed from top right
     for(let i = 0; i < height; i++){

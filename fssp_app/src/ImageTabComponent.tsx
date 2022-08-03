@@ -141,9 +141,15 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
             fetch("http://127.0.0.1:5000/post_img", {method: 'POST', body: image_url})
             .then((response) => {
                 console.log("uploaded original image to file system!");
+                return response.json();
+            }).then((json) => {
+                const trans_div = document.getElementById("trans_img") as HTMLImageElement;
+                if (trans_div){
+                    trans_div.setAttribute('src', json.url as string);
+                }
             });
 
-            
+
     } 
 
     loadImg = () => {
@@ -157,7 +163,6 @@ export class ImageTabComponent extends React.Component<ImageTabProps, ImageTabSt
                 const orig_div = document.getElementById("orig_img") as HTMLImageElement;
                 if (orig_div){
                     orig_div.setAttribute('src', e.target!.result as string);
-                    console.log(orig_div.getAttribute('src'));
                 }
             };
         }

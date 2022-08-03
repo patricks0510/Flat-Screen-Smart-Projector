@@ -7,6 +7,7 @@ import cv2 as cv
 import requests
 import numpy as np
 import time
+import os
 
 
 app = Flask(__name__)
@@ -20,21 +21,49 @@ def post_img():
     # save image from frontend to filesystem
     save_img(data_url_bytes, 'upload.bmp')
 
-    return "OK"
+    jhat_dist, origin_dist, ihat_dist = get_sensor_dists()
+    print(jhat_dist, origin_dist, ihat_dist)
 
-    # # compress and send
-    # img_bytes = img_compressed('transform.bmp')                      
-    # requests.post('http://192.168.4.1/text', data=img_bytes, 
-    #     headers = {'Content-Type': 'application/octet-stream'})
+    os.system(f'node workFlowTest.js {origin_dist} {ihat_dist} {jhat_dist}')
+    print('transformed!')
+    # assumes there is a new transform.bmp in the folder now
+
+    # compress and send to projector
+    img_bytes = img_compressed('transform.bmp')                      
+    requests.post('http://192.168.4.1/text', data=img_bytes, 
+        headers = {'Content-Type': 'application/octet-stream'})
+
+    transform_data_url = img_data_url('transform.bmp')
+    print(transform_data_url[:100])
+    return {'url': transform_data_url}
+
        
-
-
 def save_img(data_url_bytes, img_name):
     s = data_url_bytes.decode('utf-8')
     response = urllib.request.urlopen(s)
     f = open(img_name, 'wb')
     f.write(response.file.read())
     f.close()
+
+
+def get_sensor_dists():
+    J2s = []
+    J3s = []
+    J4s = []
+
+    for i in range(3):
+        dists = requests.get('http://192.168.4.1/sensors').json()
+        J2, J3, J4 = float(dists['J2']), float(dists['J3']), float(dists['J4'])
+        J2s.append(J2)
+        J3s.append(J3)
+        J4s.append(J4)
+        time.sleep(0.1) # 0.1 seconds
+
+    J2s.sort()
+    J3s.sort()
+    J4s.sort()
+
+    return J2s[1], J3s[1], J4s[1]
 
 
 def img_compressed(img_name):

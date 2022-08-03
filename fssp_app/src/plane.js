@@ -79,7 +79,7 @@ class Plane {
       let horz = dist*Math.cos(theta)
       let vert = dist*Math.sin(theta)
       //iHat calculated with trigonometry and angle between planes
-      let iHat = new Vector2(horz,vert)
+      let iHat = new Vector2(vert,horz)
       return iHat
     }
   
@@ -91,7 +91,7 @@ class Plane {
       let theta = this.getAngle()
       let horz = dist*Math.cos(theta)
       let vert = dist*Math.sin(theta)
-      let jHat = new Vector2(vert,horz)
+      let jHat = new Vector2(horz,vert)
       return jHat
     }
     
@@ -103,6 +103,8 @@ class Plane {
       let denominator = Math.sqrt(Math.pow(this.equation[0],2)+Math.pow(this.equation[1],2)+Math.pow(this.equation[2],2))
       let cosTheta = numerator/denominator
       let theta = Math.acos(cosTheta)
+      let pi = Math.PI
+      theta = 180/pi * theta
       return theta
     }
   }
