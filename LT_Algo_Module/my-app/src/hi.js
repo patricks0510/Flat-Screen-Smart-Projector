@@ -1,5 +1,7 @@
-function hi(){
-    console.log('Hello World')
+const { argv } = require('node:process');
+
+function hi(num){
+    console.log(num)
 }
 
-hi()
+hi(argv[2])
