@@ -8,30 +8,36 @@ const transformer = require('./applyTransform.js')
 
 const { performance } = require('perf_hooks');
 
-var startTime = performance.now()
+function workflowTest(origin,iHat,jHat){
+    var startTime = performance.now()
 
-var originDistance = new Vector3(0,0,10)
-var iHatDistance = new Vector3(1,0,10.5)
-var jHatDistance = new Vector3(0,1,10)
+    origin = origin/10.4
+    origin = iHat/10.4
+    origin = jHat/10.4
 
-var projPlane = new Plane(originDistance,iHatDistance,jHatDistance)
+    var originDistance = new Vector3(0,0,origin)
+    var iHatDistance = new Vector3(1,0,iHat)
+    var jHatDistance = new Vector3(0,1,jHat)
 
-projPlane.calcEq()
+    var projPlane = new Plane(originDistance,iHatDistance,jHatDistance)
 
-var iHat = projPlane.getIHat()
-var jHat = projPlane.getJHat()
-console.log(projPlane.getAngle())
-var lT = new Matrix2x2(iHat.x,jHat.x,iHat.y,jHat.y)
+    projPlane.calcEq()
 
-lT.invert()
+    var iHat = projPlane.getIHat()
+    var jHat = projPlane.getJHat()
+    console.log(projPlane.getAngle())
+    var lT = new Matrix2x2(iHat.x,jHat.x,iHat.y,jHat.y)
 
-var pic = new BmpImage('arrows')
-let newpixelStream = transformer.applyTransform(pic.pixelStream,pic.bmpData.height,pic.bmpData.width,lT)
-pic.overwritePxStream(newpixelStream)
-//pic.colorShift()
+    lT.invert()
 
-pic.createNewBMP()
+    var pic = new BmpImage('square')
+    let newpixelStream = transformer.applyTransform(pic.pixelStream,pic.bmpData.height,pic.bmpData.width,lT)
+    pic.overwritePxStream(newpixelStream)
+    //pic.colorShift()
 
-var endTime = performance.now()
+    pic.createNewBMP()
 
-console.log(`Sensor input to image output took ${endTime - startTime} milliseconds`)
+    var endTime = performance.now()
+
+    console.log(`Sensor input to image output took ${endTime - startTime} milliseconds`)
+}
