@@ -46,8 +46,8 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
     //pixel buffer position, increments by 4 as there are 4 bytes per pixel
     var buffPos = 0
     //loop through the image, pixel by pixel
-    for(let i = 0; i<height; i++) {
-      for(let j = 0; j<width;j++) {
+    for(let i = 0; i<height; i++){
+      for(let j = 0; j<width;j++){
         //get the a,r,g,b values from each pixel
         let a = pxBuffer[buffPos]
         let r = pxBuffer[buffPos+1]
@@ -57,7 +57,9 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
         //get the centered x,y coordinates from cornedered coordinates
         let x = Math.floor(-1*(j - width/2))
         let y = Math.floor(-1*(i - height/2))
-  
+        // if(i==0&j==0){
+        //   console.log('x,y: '+x,', '+y)
+        // }
         //create new pixel object and add to array, i j indexed from top left, x y indexed from center
         let formedPX = new CartesianPixel(a,r,g,b,x,y)
         pxInCartesian[j][i] = formedPX
@@ -81,14 +83,14 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
         let currentPX = pxInCartesian[j][i]
         //hold the coordinates of that pixel in cartesian system
         let originalCoords = currentPX.getCoords()
-
+        //console.log('transformMatrix: '+ transformMatrix.a+', '+transformMatrix.b+', '+transformMatrix.c+', '+transformMatrix.d)
         //calculate new coordinates of that pixel by applying transformation to the coordinates
         let newCoords = originalCoords.matMult(transformMatrix.a,transformMatrix.b,transformMatrix.c,transformMatrix.d)
 
         //keep coordinates within the size of the image
         newCoords.x = Math.floor(newCoords.x)
         newCoords.y = Math.floor(newCoords.y)
-
+        
         if(Math.abs(newCoords.x) > width/2){
             if(newCoords.x > 0){
                 newCoords.x = Math.floor(width/2)
@@ -105,6 +107,7 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
                 newCoords.y = Math.floor(-1*height/2)
             }
         }
+
         //create new pixel with those cartesian coordinates
         let movedPX = new CartesianPixel(currentPX.a,currentPX.r,currentPX.g,currentPX.b,newCoords.x,newCoords.y)
 
@@ -114,9 +117,9 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
     }
     // console.log('modified corners')
     // console.log(modPxInCartesian[0][0])
-    // console.log(modPxInCartesian[199][0])
-    // console.log(modPxInCartesian[0][149])
-    // console.log(modPxInCartesian[199][149])
+    // console.log(modPxInCartesian[width-1][0])
+    // console.log(modPxInCartesian[0][height-1])
+    // console.log(modPxInCartesian[width-1][height-1])
 
     //empty array of empty pixels
     let sortedTopRightPX = [...Array(width)].map(e => Array(height).fill(filler1))
@@ -131,6 +134,7 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
           let realX = Math.floor(modPxInCartesian[j][i].x + width/2)
           let realY = Math.floor(modPxInCartesian[j][i].y + height/2)
           
+          //ensure no pixels writen out of bounds
           if(realX > width){
             realX = width
           }
@@ -162,12 +166,12 @@ function applyTransform(decodedBMP,height,width,transformMatrix){
 
     buffPos = 0
     //start with the lowest x values and the highest y values to get a pixel stream indexed from top right
-    for(let i = 0; i < height; i++){
-      for(let j = 0; j < width; j++){
+    for(i = height-1; i >= 0; i--){
+      for(j = width-1; j >= 0; j--){
         
         //get the pixel at current index
         //let currentPX = sortedTopRightPX[j][i]
-        
+        //console.log('i,j ' + i + ', '+ j)
         //put pixel data back into pxBuffer 
         pxBuffer[buffPos]   = sortedTopRightPX[j][i].a
         pxBuffer[buffPos+1] = sortedTopRightPX[j][i].r

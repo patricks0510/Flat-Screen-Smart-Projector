@@ -43,6 +43,7 @@ class Plane {
       let RHS = this.v1.x*xProd.x + this.v1.y*xProd.y + this.v1.z*xProd.z
       //equation is the cross product <x,y,z> = RHS
       this.equation = [xProd.x,xProd.y,xProd.z,RHS]
+      console.log('detected plane equation: ' + this.equation)
       //this.setEq()
     }
     setEq(){
@@ -57,7 +58,7 @@ class Plane {
       }
     }
   
-    //unit vectors determined from sensors (v2 and v3) are hard coded to:
+    //unit vectors determined from sensors (v2 and v3):
     //      <1,0,beta> and <0,1,gamma>
     //these methods use the orign (v1) and the sensors do determine the actual
     //distance between the origin and the unit sensors
