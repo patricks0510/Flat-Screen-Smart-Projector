@@ -8,17 +8,17 @@ const transformer = require('./applyTransform.js')
 const { argv } = require('node:process');
 const { performance } = require('perf_hooks');
 
-function workflowTest(origin,iHat,jHat){
+function workflowTest(originIn,iHatIn,jHatIn){
     var startTime = performance.now()
 
 
-    origin = origin/10.4
-    iHat = iHat/10.4
-    jHat = jHat/10.4
+    originIn = originIn/10.4
+    iHatIn = iHatIn/10.4
+    jHatIn = jHatIn/10.4
 
-    var originDistance = new Vector3(0,0,origin)
-    var iHatDistance = new Vector3(1,0,iHat)
-    var jHatDistance = new Vector3(0,1,jHat)
+    var originDistance = new Vector3(0,0,originIn)
+    var iHatDistance = new Vector3(1,0,iHatIn)
+    var jHatDistance = new Vector3(0,1,jHatIn)
 
     var projPlane = new Plane(originDistance,iHatDistance,jHatDistance)
 
@@ -26,12 +26,13 @@ function workflowTest(origin,iHat,jHat){
 
     var iHat = projPlane.getIHat()
     var jHat = projPlane.getJHat()
-    console.log(projPlane.getAngle())
+    //console.log(projPlane.getAngle())
     var lT = new Matrix2x2(iHat.x,jHat.x,iHat.y,jHat.y)
-
+    console.log(lT.a+', '+lT.b+', '+lT.c+', '+lT.d)
     lT.invert()
-
-    var pic = new BmpImage('square')
+    console.log(lT.a+', '+lT.b+', '+lT.c+', '+lT.d)
+    
+    var pic = new BmpImage('triangle')
     let newpixelStream = transformer.applyTransform(pic.pixelStream,pic.bmpData.height,pic.bmpData.width,lT)
     pic.overwritePxStream(newpixelStream)
     //pic.colorShift()
