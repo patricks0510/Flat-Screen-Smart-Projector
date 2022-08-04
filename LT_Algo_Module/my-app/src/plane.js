@@ -98,6 +98,8 @@ class Plane {
       let denominator = Math.sqrt(Math.pow(this.equation[0],2)+Math.pow(this.equation[1],2)+Math.pow(this.equation[2],2))
       let cosTheta = numerator/denominator
       let theta = Math.acos(cosTheta)
+      // let pi = Math.PI
+      // let thetaDeg = 180/pi*theta
       return theta
     }
   }

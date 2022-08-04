@@ -26,13 +26,13 @@ function workflowTest(originIn,iHatIn,jHatIn){
 
     var iHat = projPlane.getIHat()
     var jHat = projPlane.getJHat()
-    //console.log(projPlane.getAngle())
+    console.log('angle: '+projPlane.getAngle())
     var lT = new Matrix2x2(iHat.x,jHat.x,iHat.y,jHat.y)
     console.log(lT.a+', '+lT.b+', '+lT.c+', '+lT.d)
     lT.invert()
     console.log(lT.a+', '+lT.b+', '+lT.c+', '+lT.d)
     
-    var pic = new BmpImage('triangle')
+    var pic = new BmpImage('6ptStar')
     let newpixelStream = transformer.applyTransform(pic.pixelStream,pic.bmpData.height,pic.bmpData.width,lT)
     pic.overwritePxStream(newpixelStream)
     //pic.colorShift()
