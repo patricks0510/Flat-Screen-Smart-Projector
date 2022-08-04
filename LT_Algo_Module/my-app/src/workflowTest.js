@@ -32,7 +32,7 @@ function workflowTest(originIn,iHatIn,jHatIn){
     lT.invert()
     console.log(lT.a+', '+lT.b+', '+lT.c+', '+lT.d)
     
-    var pic = new BmpImage('6ptStar')
+    var pic = new BmpImage('square')
     let newpixelStream = transformer.applyTransform(pic.pixelStream,pic.bmpData.height,pic.bmpData.width,lT)
     pic.overwritePxStream(newpixelStream)
     //pic.colorShift()
